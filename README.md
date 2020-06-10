@@ -5,7 +5,7 @@ Proyecto creado con [Create React App](https://github.com/facebook/create-react-
 git clone https://github.com/nicolasmunozd/desafioZeroq.git
 npm install
 
-## Available Scripts
+## Script para ejecutar
 
 En el proyecto se puede ejecujar los siguientes comandos:
 
