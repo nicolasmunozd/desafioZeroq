@@ -1,84 +1,82 @@
-import React from 'react';
+/* eslint-disable no-undef */
+import React, { useState, useEffect } from 'react';
 import logo from './images/logo.png';
 import './App.css';
 import Home from './components/Home';
 import Search from './components/Search';
-import Loading from './components/Loading'
+import Loading from './components/Loading';
 import WithoutResult from './components/WithoutResults';
 
-class App extends React.Component{
+const App = () => {
+	const [state, setState] = useState({
+		textSearch: '',
+		dataFilter: [],
+	});
 
-  state ={
-    textSearch:'',
-    data: [],
-    dataFilter:[],
-    loadData:false
-  }
-  
-  searchChange = e => {
+	const [dataFetch, setDataFetch] = useState([]);
 
-    const filteredOffice = this.state.data.filter(office => {
-      return office.name.toUpperCase().includes(e.target.value.toUpperCase());
-    })
+	const [loadData, setLoadData] = useState(false);
 
-    this.setState({
-      textSearch:e.target.value,
-      dataFilter: filteredOffice
-    })
-  }
+	const fetchOffices = () => {
+		fetch('https://boiling-mountain-49639.herokuapp.com/desafio-frontend')
+			.then((resp) => {
+				return resp.json();
+			})
+			.then((data) => {
+				if (data) {
+					setState({
+						dataFilter: data,
+					});
+					setDataFetch(data);
+					setLoadData(true);
+				}
+			});
+	};
 
- 
-  componentDidMount(){
-      this.fetchOffices();
-  }
+	useEffect(() => {
+		fetchOffices();
+	}, []);
 
-fetchOffices = async () => {
-    const response = await fetch('https://boiling-mountain-49639.herokuapp.com/desafio-frontend')
+	const searchChange = (e) => {
+		const filteredOffice = dataFetch.filter((office) => {
+			return office.name.toUpperCase().includes(e.target.value.toUpperCase());
+		});
 
-    const data = await response.json();
-    const filteredOffice = data.filter(office => {
-        return office.name.toUpperCase().includes('');
-    })
-    this.setState({
-        data: data,
-        dataFilter: filteredOffice,
-        loadData: true
-    })
-}
+		setState({
+			textSearch: e.target.value,
+			dataFilter: filteredOffice,
+		});
+	};
 
-  render(){
+	if (!loadData) {
+		return (
+			<div className="App">
+				<Loading />
+			</div>
+		);
+	}
 
-    if(!this.state.loadData){
-      return(
-        <div className="App">
-            <Loading />
-        </div>
-      )
-    }
+	if (state.dataFilter.length < 1) {
+		return (
+			<div className="App">
+				<header className="App-header">
+					<img src={logo} className="Logo" alt="logo" />
+				</header>
+				<Search onChange={searchChange} />
+				<WithoutResult />
+			</div>
+		);
+	}
 
-    if(this.state.dataFilter.length<1){
-      return(
-        <div className="App">
-          <header className="App-header">
-            <img src={logo} className="Logo" alt="logo" />
-          </header>
-          <Search onChange={this.searchChange} />
-          <WithoutResult />
-        </div>
-      )
-    }
-
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="Logo" alt="logo" />
-        </header>
-        <Search onChange={this.searchChange} />
-        <Home dataFilter={this.state.dataFilter} />
-      </div>
-    )
-  }
-  
-}
+	return (
+		<div className="App">
+			<header className="App-header">
+				<img src={logo} className="Logo" alt="logo" />
+			</header>
+			<Search onChange={searchChange} />
+			<Home dataFilter={state.dataFilter} />
+		</div>
+	);
+};
 
 export default App;
