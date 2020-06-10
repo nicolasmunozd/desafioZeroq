@@ -2,7 +2,7 @@ Proyecto creado con [Create React App](https://github.com/facebook/create-react-
 
 ### Instalación del proyecto
 
-git clone https://github.com/nicolasmunozd/desafioZeroq.git
+git clone https://github.com/nicolasmunozd/desafioZeroq.git<br />
 npm install
 
 ## Script para ejecutar
@@ -11,8 +11,7 @@ En el proyecto se puede ejecujar los siguientes comandos:
 
 ### `npm start`
 
-Para correr el sitio en desarrollo<br />
-abrir [http://localhost:3000](http://localhost:3000) en el navegador
+Para correr el sitio en desarrollo abrir [http://localhost:3000](http://localhost:3000) en el navegador
 
 ### `npm test`
 
